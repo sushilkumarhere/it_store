@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+{% extends "cpanel/AdminBase.html" %}
+            {% block title %}
+                     <div class="card-header">
+                           <div class="d-flex align-items-center">
+                              <h5 class="card-title"> <i class="fas fa-edit"></i>Current Status</h5>
+                           </div>
+                     </div>
+            {% endblock title %}
+   <body> 
+      {% block mainblock %}         
+               <!-- Item Quantity Purchase & Issue tables -->
+           
+            <div class="card-group">
+                <ul class="list-group">
+                     <li class="list-group-item"><h4>Items</h4></li>
+                     {% for block in ds %}
+                  <li class="list-group-item">{{ block.item_name }}</li>
+                   {% endfor  %}
+                </ul>
+                <ul class="list-group">
+                   <li class="list-group-item"><h4>Purchase Quantity</h4></li>
+                    {% for itm2 in ds %}
+                  <li class="list-group-item">{{ itm2.purchase_qty }}</li>
+                     {% endfor  %}
+                </ul>
+                <!--
+                <ul class="list-group">
+                    <li class="list-group-item"><h4>Items</h4></li>
+                    {% for block in ds1 %}
+                 <li class="list-group-item">{{ block.item_name}}</li>
+                  {% endfor  %}
+               </ul>
+               -->
+                <ul class="list-group">
+                   <li class="list-group-item"><h4>Issue Quantity</h4></li>
+                    {% for itm1 in ds1 %}
+                  <li class="list-group-item">{{ itm1.issue_qty }}</li>
+                     {% endfor  %}
+                </ul>
+      {% endblock %}  
+   </body>
+</html>

@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+  {% extends "base.html" %}
+  {% load static %}
+  
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://kit.fontawesome.com/yourcode.js" crossorigin="anonymous"></script>
+  </head>
+  <body>
+    {% block content %}
+    <!-- Header Area wrapper End -->
+
+    <!-- Services Section Start -->
+    <section id="services" class="section-padding">
+          <div class="container">
+                <div class="section-header text-center">
+                  <h2 class="section-title wow fadeInDown" data-wow-delay="0.3s">Our Hardware Details</h2>
+                  
+                  <div class="shape wow fadeInDown" data-wow-delay="0.3s"></div>
+                </div>
+               
+          <!-- Dash Board -->
+                   
+
+                  <div class="row row-cols-1 row-cols-md-3 g-4">
+                    <div class="col">
+                      <div class="card border-primary mb-3"">
+                        <img src="{% static "assets/img/item/cs.jpg" %}" class="img-thumbnail img-responsive " style="height: 200px; width: 300px;">
+                        <div class="card-body"> 
+                         <a rel="nofollow" href="{% url 'computer_list' %}"  class="card-title"> <h5>Computer Systems:  {{ computer.item_qty__sum }}</h5> </a>
+                          <figcaption class="blockquote-footer">
+                            Issue Record 
+                          </figcaption>
+                        </div>
+                          
+                         <div class="card-footer">
+                          <small class="text-muted">Last updated : {{ updt.updated_at }}</small>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col">
+                      <div class="card border-primary mb-3"">
+                        <img src="{% static "assets/img/item/printer.jpg" %}" class="img-thumbnail img-responsive " style="height: 200px; width: 300px;">
+                        <div class="card-body"> 
+                          <h5 class="card-title">Printer:  {{ printer.item_qty__sum }}</h5>
+                          <figcaption class="blockquote-footer">
+                            Issue Record 
+                          </figcaption>
+                         </div>
+                         <div class="card-footer">
+                          <small class="text-muted">Last updated : {{ updt.updated_at }}</small>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col">
+                      <div class="card border-primary mb-3"">
+                        <img src="{% static "assets/img/item/projector.jpg" %}" class="img-thumbnail img-responsive " style="height: 200px; width: 300px;">
+                        <div class="card-body"> 
+                          <h5 class="card-title">Projector:  {{ projector.item_qty__sum }}</h5>
+                          <figcaption class="blockquote-footer">
+                            Issue Record 
+                          </figcaption>
+                         </div>
+                         <div class="card-footer">
+                          <small class="text-muted">Last updated : {{ updt.updated_at }}</small>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col">
+                      <div class="card border-primary mb-3"">
+                        <img src="{% static "assets/img/item/scanner.jpg" %}" class="img-thumbnail img-responsive " style="height: 200px; width: 300px;">
+                        <div class="card-body"> 
+                          <h5 class="card-title">Scanner:  {{ scanner.item_qty__sum }}</h5>
+                          <figcaption class="blockquote-footer">
+                            Issue Record 
+                          </figcaption>
+                         </div>
+                         <div class="card-footer">
+                          <small class="text-muted">Last updated : {{ updt.updated_at }}</small>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+
+                </div>
+          </div>
+    </section>
+    <!-- Services Section End -->
+    {% endblock content %}
+  </body>
+ 
+</html>

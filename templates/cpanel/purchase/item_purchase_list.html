@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+    {% extends "cpanel/AdminBase.html" %}
+    {% load widget_tweaks %}
+  <body>
+        {% block title %}
+                <div class="card-header">
+                    <div class="d-flex align-items-center">
+                        <h5 class="card-title"> <i class="fas fa-edit"></i>Purchase Item List->>Quantity|{{ totality.item_qty__sum }}</h5> 
+                        &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;
+                        &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;
+                        &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;
+                        <a href="{% url 'export_xls_purchase' %}"><i class="fas fa-file-export fa-1x"> Excel</i></a>
+                        &ensp;&ensp;&ensp;&ensp;
+                        <a href="{% url 'print_purchase_item' %}"><i class="fas fa-print fa-1x">Print</i></a>                     
+                        
+                    </div>
+                </div>
+        {% endblock title %}
+
+    {% block mainblock %}
+                                            <!-- Search form -->      
+        <div class="container">           
+              <form class="row g-3" method="get" id="ItemSearch" data-cities-url="{% url 'ajax_load_ItemModel' %}" >
+                {% csrf_token %} 
+                  <div class="col-4">
+                      {{ filter.form.item_name.label_tag }}
+                      {% render_field filter.form.item_name class="form-control" %}
+                  </div>
+                  <div class="col-4">
+                      {{ filter.form.item_model.label_tag }}
+                      {% render_field filter.form.item_model class="form-control" %}
+                  </div>                  
+                  <div class="col-auto"> 
+                    <br>                                
+                    <button type="submit" class="btn btn-primary mb-3" ><i class="fas fa-search fa-1x"></i> </button>                                                                   
+                  </div>                                               
+              </form>  
+        </div>        
+            
+      <div class="card card-body border-light shadow-sm table-wrapper table-responsive pt-0">
+        <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th scope="col">Purchase Date</th>
+                    <th scope="col">Item Name</th>
+                    <th scope="col">Model No[Spec]</th>                   
+                    <th scope="col">Vendor Name </th>
+                    <th scope="col">Invoice</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Quantity</th>  
+                    <th scope="col">File</th>  
+                    <th scope="col">Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for itm in filter.qs %}
+                  <tr>
+                      <td>{{ itm.item_purchase_date }}</td>
+                      <td>{{ itm.item_name }}</td>
+                      <td>{{ itm.item_model }} <p class="text-primary"> [{{ itm.item_configuration }}]</p></td>                    
+                      <td>{{ itm.item_vendor }}</td>
+                      <td>{{ itm.item_invoice }}</td>
+                      <td>{{ itm.item_price }}</td>
+                      <td>{{ itm.item_qty }}</td>  
+                      {% if itm.item_invoice_file %}
+                      <td><a href="{{ itm.item_invoice_file.url }}" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-download fa-2x"></i></a> </td>                         
+                {% else %}                  
+                      <td><i class="far fa-times-circle fa-2x"></i></td>                   
+                {% endif %} 
+                    <td>
+                      <a href="{% url 'purchase_item_update' itm.id %}" class="edit" id = '{{itm.id}}' title="Edit" data-toggle="tooltip"><i class="fas fa-edit fa-2x"></i></a>
+                      <a href="{% url 'purchase_item_delete' itm.id %}" class="Delete" id = '{{itm.id}}'title="Delete" data-toggle="tooltip"> 
+                        <span style="color: Tomato;">
+                          <i class="fas fa-trash fa-1x "></i></a>  
+                        </span>                    
+                    </td> 
+                  </tr>
+                {% endfor  %}
+                </tbody>
+            </table>
+        </div>
+      </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+          <script>
+            $("#id_item_name").change(function () {
+              var url = $("#ItemSearch").attr("data-cities-url");
+              var itemId = $(this).val();
+              $.ajax({
+                url: url,
+                data: {
+                  'item_name': itemId
+                },
+                success: function (data) {
+                  $("#id_item_model").html(data);
+                }
+              });
+            });
+          </script>
+    {% endblock mainblock %}
+  </body>
+</html>

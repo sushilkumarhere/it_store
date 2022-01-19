@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+                    <head>
+                        <style>
+                            table { font-family: arial, sans-serif;border-collapse: collapse;width: 100%;}                            
+                            td, th {border: 1px solid black;text-align: left;padding: 3px;}                            
+                            tr:nth-child(even) {background-color: #dddddd; }
+                            h2 {text-align: center;}
+                        </style>
+                    </head>
+    <body>
+      <h2 style="font-size:20px">List of Items(Issue/Distrubution)</h2>                                                                    
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col"style="width: 100px;">Item Name</th>
+                            <th scope="col"style="width: 180px;">Model No[Spec]</th>
+                            <th scope="col"style="width: 180px;">Block[room no]/Type</th>
+                            <th scope="col"style="width: 200px;">Department/User </th>
+                            <th scope="col">Qty</th>                                 
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for itm in filter.qs %}
+                    <tr>
+                        <td>{{ itm.item_name }}</td>
+                        <td>{{ itm.item_model }} | [{{ itm.item_configuration }}]</td>
+                        <td>{{ itm.acblock }} [{{ itm.room }}] : {{ itm.room_type }}</td>
+                        <td>{{ itm.inst }}:{{ itm.user }}</td>
+                        <td>{{ itm.item_qty }}</td>                                            
+                    </tr>
+                    {% endfor  %}
+                    </tbody>
+                </table>
+            </div> 
+    </body>
+</html>

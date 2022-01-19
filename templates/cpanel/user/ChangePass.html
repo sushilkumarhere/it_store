@@ -1,0 +1,24 @@
+<html>
+{% extends "cpanel/AdminBase.html" %}
+{% load widget_tweaks %}
+{% load static %}
+{% block mainblock %}
+
+<form method="post">
+    {% csrf_token %}
+    <div class="modal-body">
+        <h3 style="color:green"> {{info}} </h3>
+        <centre>
+            <table border="1">
+                {{form}}
+                </table>
+            </centre>
+      </div>
+    <button type="submit" class="btn btn-primary">Save Change</button>
+  </form>
+
+
+{% endblock mainblock %}
+  
+</body>
+</html>

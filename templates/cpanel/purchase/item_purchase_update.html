@@ -1,0 +1,63 @@
+{% extends "cpanel/AdminBase.html" %}
+{% load widget_tweaks %}
+{% load static %}
+{% block mainblock %}
+<html>
+<head>
+    <title>Edit Services</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<div class="col-md-12">
+		<div class="card">
+                    <div class="card-header">
+                        <div class="d-flex align-items-center">
+                            <h5 class="card-title"> <i class="fas fa-edit"></i>Update Purchase Items</h5>
+                        </div>
+                    </div>
+            <div class="card-body">                               
+                                        <form class="row g-1" method="post" enctype="multipart/form-data" id="ItemCreat" data-cities-url="{% url 'ajax_load_ItemModel' %}" novalidate>
+                                            {% csrf_token %}                                    
+                                            {% for field in form.visible_fields %}
+                                             <div class="col-md-4">
+                                                <label for="inputEmail4" class="form-label">{{ field.label }}</label>
+                                                  <div class="form-control">{{ field  }} </div>
+                                                  <div class="text-danger">{{ field.errors  }} </div>
+                                              </div>
+                                            {% endfor %}
+                                            
+                                            <div class="col-12">
+                                                <button type="submit" class="btn btn-primary">Update</button>
+                                            </div>
+                                        </form>
+                                        <br>
+                                    <div class="col-md-1 col-xs-1 col-sm-1"></div>
+                                
+            </div>
+        </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+            <script>
+                    $("#id_item_name").change(function () {
+                        var url = $("#ItemCreat").attr("data-cities-url");
+                        var itemId = $(this).val();
+                        $.ajax({
+                        url: url,
+                        data: {
+                            'item_name': itemId
+                        },
+                        success: function (data) {
+                            $("#id_item_model").html(data);
+                        }
+                        });
+
+                    });
+            </script>
+
+
+</body>
+</html>
+{% endblock %}

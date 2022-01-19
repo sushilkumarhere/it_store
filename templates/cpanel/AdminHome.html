@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+    {% extends "cpanel/AdminBase.html" %}
+        {% block title %}
+        <div class="card-header">
+          <div class="d-flex align-items-center">
+              <h5 class="card-title"> <i class="fas fa-edit"></i>Admin Home Page</h5>
+          </div>
+      </div>
+    {% endblock title %}
+<body>
+    {% block mainblock %}
+
+    <!-- Content Row -->
+    <div class="row">
+
+      <!-- Earnings (Monthly) Card Example -->
+      <div class="col-xl-3 col-md-6 mb-4">
+          <div class="card border-left-primary shadow h-100 py-2">
+              <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                      <div class="col mr-2">
+                          <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                             Computer system
+                            </div>
+                            <i class="fa-regular fa-sigma"></i>
+                          <div class="h5 mb-2 font-weight-bold text-gray-800">{{ computer.item_qty__sum }}</div>
+                      </div>
+                      <div class="col-auto">
+                          <i class="fa fa-desktop fa-5x" aria-hidden="true"></i>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+
+      <!-- Earnings (Monthly) Card Example -->
+      <div class="col-xl-3 col-md-6 mb-4">
+          <div class="card border-left-success shadow h-100 py-2">
+              <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                      <div class="col mr-2">
+                          <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                              Printer
+                            </div>
+                          <div class="h5 mb-0 font-weight-bold text-gray-800">{{ printer.item_qty__sum }}</div>
+                      </div>
+                      <div class="col-auto">
+                          <i class="fa fa-print fa-5x" aria-hidden="true"></i>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+
+       <!-- Earnings (Monthly) Card Example -->
+       <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-info shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                          Projector
+                        </div>
+                        <div class="row no-gutters align-items-center">
+                            <div class="col-auto">
+                                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{ projector.item_qty__sum }}</div>
+                            </div>                            
+                        </div>
+                    </div>                    
+                    <div class="col-auto">
+                        <i class="fas fa-clipboard-list fa-5x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pending Requests Card Example -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-warning shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                            Scanner
+                          </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ scanner.item_qty__sum }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fa fa-barcode fa-5x" aria-hidden="true"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+      <!-- Chart of Item Quantity Academic Block Wise -->
+        <div class="col-xl-12">
+                 <div id="container" style="width: 100%;">
+                    <canvas id="item-chart" data-url="{% url 'chart_bar' %}"></canvas>
+                  </div>
+                  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+                  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+                  <script>
+                    $(function () {
+                      var $itemChart = $("#item-chart");
+                      $.ajax({
+                        url: $itemChart.data("url"),
+                        success: function (data) {
+                          var ctx = $itemChart[0].getContext("2d");
+                          new Chart(ctx, {
+                            type: 'bar',
+                            data: {
+                              labels: data.labels,
+                              datasets: [{
+                                label: 'System Quantity',
+                                backgroundColor: 'blue',
+                                data: data.data
+                              }]
+                            },
+                            options: {
+                              responsive: true,
+                              legend: {
+                                position: 'top',
+                              },
+                              title: {
+                                display: true,
+                                text: 'Computer System Academic Block wise'
+                              }
+                            }
+                          });
+                        }
+                      });
+                    });
+                  </script>
+        </div>
+    {% endblock mainblock %}
+  </body>
+</html>

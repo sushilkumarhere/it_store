@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+{% extends "cpanel/AdminBase.html" %}
+
+{% load widget_tweaks %}
+  <body>
+                  
+    {% block title %}
+    <div class="card-header">
+        <div class="d-flex align-items-center">
+               
+                <h5 class="card-title"> <i class="fas fa-edit"></i>Brandwise Item List  ----->>Total Quantity | {{ itmqty.total_qty_c__sum }}</h5> 
+        </div>
+    </div>
+  {% endblock title %}
+
+  {% block mainblock %}
+
+    <div class="container"> 
+            <form class="row g-3" method="get" id="ItemSearch"  >
+              {% csrf_token %}
+                      <div class="col-3">               
+                          {{ filter.form.item_name.label_tag }}
+                          {% render_field filter.form.item_name class="form-control" %}
+                      </div>
+                      <div class="col-3">
+                        {{ filter.form.acblock.label_tag }}
+                        {% render_field filter.form.acblock class="form-control" %}
+                    </div>
+                      <div class="col-auto"> 
+                        <br>                                
+                        <button type="submit" class="btn btn-primary mb-3" ><i class="fas fa-search fa-1x"></i> </button>                                                                   
+                      </div>                  
+              
+            </form>
+    </div>
+
+
+                <div class="row">
+                    <div class="col-md-6 grid-margin stretch-card">
+                      <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                  <table class="table">
+                                                    <thead>
+                                                          <tr>
+                                                            <th scope="col"><h4>Model Name</h4></th>
+                                                              <th scope="col"><h4>Quantity</h4></th>
+                                                          </tr>
+                                                    </thead>
+                                                <tbody>
+                                                  {% for itm in filter.qs %}
+                                                  <tr>
+                                                    <td>{{ itm.item_model__model_name }}</td>
+                                                    <td>{{ itm.total_qty_c }}</td>
+                                                  </tr>
+                                                    {% endfor  %}
+                                                  
+                                                </tbody>
+                                                <thead>
+                                                  <tr>
+                                                    <th scope="col"><h4>Total</h4></th>
+                                                      <th scope="col"><h4>{{ itmqty.total_qty_c__sum }}</h4></th>
+                                                  </tr>
+                                            </thead>                                               
+                                  </table>                                  
+                            </div>
+                        </div>
+                      </div>
+                    </div>
+    </body>
+  {% endblock mainblock %}
+</html>

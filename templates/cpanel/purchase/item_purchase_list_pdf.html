@@ -1,0 +1,44 @@
+<!DOCTYPE html>  
+
+    <head>
+        <style>
+            table { font-family: arial, sans-serif;border-collapse: collapse;width: 100%;}                            
+            td, th {border: 1px solid black;text-align: left;padding: 3px;}                            
+            tr:nth-child(even) {background-color: #dddddd; }
+            h2 {text-align: center;}
+        </style>        
+    </head>
+  <body>
+    <h2 style="font-size:20px">List of Items(Purchase)</h2>          
+     
+        <table >          
+                <thead>
+                  <tr>
+                      <th scope="col" style="width: 90px;">Purchase Date</th>
+                      <th scope="col" style="width:95px;">Item Name</th>
+                      <th scope="col" style="width:120px;">Model No</th>                   
+                      <th scope="col" style="width:190px;">Vendor Name </th>
+                      <th scope="col" style="width:120px;" >Invoice</th>
+                      <th scope="col">Price</th>
+                      <th scope="col">Quantity</th>                      
+                  </tr>
+                </thead>
+                <tbody>
+                {% for itm in filter.qs %}
+                  <tr>
+                      <td>{{ itm.item_purchase_date }}</td>
+                      <td>{{ itm.item_name }}</td>
+                      <td>{{ itm.item_model }} </td>                    
+                      <td>{{ itm.item_vendor }}</td>
+                      <td>{{ itm.item_invoice }}</td>
+                      <td>{{ itm.item_price }}</td>
+                      <td>{{ itm.item_qty }}</td>                        
+                  </tr>
+                {% endfor  %}
+                </tbody>
+            </table>
+        </div>
+      </div>
+    
+  </body>
+</html>
