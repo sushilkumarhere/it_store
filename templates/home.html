@@ -1,99 +1,111 @@
 <!doctype html>
-<html lang="en">
   {% extends "base.html" %}
-  {% load static %}
-  
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="https://kit.fontawesome.com/yourcode.js" crossorigin="anonymous"></script>
-  </head>
-  <body>
-    {% block content %}
-    <!-- Header Area wrapper End -->
-
-    <!-- Services Section Start -->
-    <section id="services" class="section-padding">
-          <div class="container">
+  {% load static %}  
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">      
+    </head>
+    <body>
+        {% block content %}
+    
                 <div class="section-header text-center">
-                  <h2 class="section-title wow fadeInDown" data-wow-delay="0.3s">Our Hardware Details</h2>
-                  
+                  <h3 class="section-title wow fadeInDown" data-wow-delay="0.3s">IT Services Equipments</h3>                  
                   <div class="shape wow fadeInDown" data-wow-delay="0.3s"></div>
-                </div>
-               
+                </div>               
           <!-- Dash Board -->
-                   
-
-                  <div class="row row-cols-1 row-cols-md-3 g-4">
-                    <div class="col">
-                      <div class="card border-primary mb-3"">
-                        <img src="{% static "assets/img/item/cs.jpg" %}" class="img-thumbnail img-responsive " style="height: 200px; width: 300px;">
-                        <div class="card-body"> 
-                         <a rel="nofollow" href="{% url 'computer_list' %}"  class="card-title"> <h5>Computer Systems:  {{ computer.item_qty__sum }}</h5> </a>
-                          <figcaption class="blockquote-footer">
-                            Issue Record 
-                          </figcaption>
+            <div class="row">
+                <!-- Card Example -->
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card border-left-primary shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <a rel="nofollow" href="{% url 'computer_list' %}" class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                        Computer system </a>
+                                        <i class="fa-regular fa-sigma"></i>
+                                    <div class="h5 mb-2 font-weight-bold text-gray-800">{{ computer.item_qty__sum }}</div>
+                                    
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fa fa-desktop fa-5x" aria-hidden="true"></i>
+                                </div>
+                            </div>                  
                         </div>
-                          
-                         <div class="card-footer">
-                          <small class="text-muted">Last updated : {{ updt.updated_at }}</small>
+                        <div class="card-footer">
+                            <small class="text-muted">Issued | updated : {{ updt.updated_at }}</small>
                         </div>
-                      </div>
                     </div>
-
-                    <div class="col">
-                      <div class="card border-primary mb-3"">
-                        <img src="{% static "assets/img/item/printer.jpg" %}" class="img-thumbnail img-responsive " style="height: 200px; width: 300px;">
-                        <div class="card-body"> 
-                          <h5 class="card-title">Printer:  {{ printer.item_qty__sum }}</h5>
-                          <figcaption class="blockquote-footer">
-                            Issue Record 
-                          </figcaption>
-                         </div>
-                         <div class="card-footer">
-                          <small class="text-muted">Last updated : {{ updt.updated_at }}</small>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="col">
-                      <div class="card border-primary mb-3"">
-                        <img src="{% static "assets/img/item/projector.jpg" %}" class="img-thumbnail img-responsive " style="height: 200px; width: 300px;">
-                        <div class="card-body"> 
-                          <h5 class="card-title">Projector:  {{ projector.item_qty__sum }}</h5>
-                          <figcaption class="blockquote-footer">
-                            Issue Record 
-                          </figcaption>
-                         </div>
-                         <div class="card-footer">
-                          <small class="text-muted">Last updated : {{ updt.updated_at }}</small>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="col">
-                      <div class="card border-primary mb-3"">
-                        <img src="{% static "assets/img/item/scanner.jpg" %}" class="img-thumbnail img-responsive " style="height: 200px; width: 300px;">
-                        <div class="card-body"> 
-                          <h5 class="card-title">Scanner:  {{ scanner.item_qty__sum }}</h5>
-                          <figcaption class="blockquote-footer">
-                            Issue Record 
-                          </figcaption>
-                         </div>
-                         <div class="card-footer">
-                          <small class="text-muted">Last updated : {{ updt.updated_at }}</small>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-
                 </div>
-          </div>
-    </section>
-    <!-- Services Section End -->
-    {% endblock content %}
-  </body>
- 
+                <!-- Earnings (Monthly) Card Example -->
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card border-left-success shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                        Printer
+                                        </div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{ printer.item_qty__sum }}</div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fa fa-print fa-5x" aria-hidden="true"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <small class="text-muted">Issued | updated : {{ updt.updated_at }}</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Earnings (Monthly) Card Example -->
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card border-left-info shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                    Projector
+                                    </div>
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col-auto">
+                                            <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{ projector.item_qty__sum }}</div>
+                                        </div>                            
+                                    </div>
+                                </div>                    
+                                <div class="col-auto">
+                                    <i class="fas fa-clipboard-list fa-5x text-gray-300"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                        <small class="text-muted">Issued | updated : {{ updt.updated_at }}</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pending Requests Card Example -->
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card border-left-warning shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Scanner</div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{ scanner.item_qty__sum }}</div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fa fa-barcode fa-5x" aria-hidden="true"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                        <small class="text-muted">Issued | updated : {{ updt.updated_at }}</small>
+                        </div>
+                    </div>        
+                </div>
+            </div>
+            
+        {% endblock content %}
+  </body> 
 </html>

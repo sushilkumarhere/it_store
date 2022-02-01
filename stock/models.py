@@ -205,3 +205,18 @@ def auto_delete_file_on_delete(sender, instance, **kwargs):
 
 
 # Update user Profile 
+scrap_type = (('SCRAP','SCRAP'), ('DONATE', 'DONATE'))
+
+class ItemScrap(models.Model):
+    item_scarp_date = models.DateField(null=True,blank=True)
+    item_name = models.ForeignKey(ItemName, on_delete=models.CASCADE)
+    item_model = models.ForeignKey(ItemModel, on_delete=models.CASCADE)
+    item_configuration = models.CharField("Items Specifications", max_length=100)
+    purchase_date = models.DateField(null=True,blank=True)
+    scrap_type = models.CharField("Scrap Type",choices=scrap_type,max_length=10 ,default="SCRAP")
+    item_qty = models.IntegerField()
+    item_vendor = models.CharField("Vendor Name",max_length=100)
+
+
+    class Meta:
+        verbose_name = "Item Scarp"

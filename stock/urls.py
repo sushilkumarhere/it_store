@@ -8,9 +8,7 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('system/', views.item_list, name='computer_list'),
     path('excel/', views.export_xls_issue, name='export_xls_issue'),
-    path('excel_perchase/', views.export_xls_purchase, name='export_xls_purchase'),
-    path('labs/', views.labs, name='labs'),
-    
+    path('excel_perchase/', views.export_xls_purchase, name='export_xls_purchase'),  
 
 
     # Control Panel Site URLs
@@ -34,4 +32,7 @@ urlpatterns = [
     path('cpanel/IssueStatus/', views.IssueStatus, name='IssueStatus'),
     path('cpanel/purchase/Print', views.GeneratePdf_purchase_items.as_view(), name='print_purchase_item'),
     path('cpanel/issue/print/', views.GeneratePdf_issue_items.as_view(), name='print_issue_item'),
-]
+    path('cpanel/scrapadd/', views.itemscrap, name='itemscrap'),
+    path('cpanel/scraplist/', views.itemscraplist, name='itemscraplist'),
+    
+]   

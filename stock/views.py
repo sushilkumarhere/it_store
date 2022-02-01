@@ -4,12 +4,12 @@ import xlwt,os,json
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, JsonResponse
-from stock.forms import Create_ItmDist_Form, item_list_update , Item_purchase_create_Form,purchase_item_update_form
-from stock.models import ItemDist, ItemName, ItemModel, ac_block,ItemPurchase
+from stock.forms import Create_ItmDist_Form, item_list_update , Item_purchase_create_Form,purchase_item_update_form ,Create_scrap_Form
+from stock.models import ItemDist, ItemName, ItemModel, ac_block,ItemPurchase , ItemScrap
 from django.db.models import Sum, Q
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render, get_object_or_404, redirect
-from .filters import Item_dstFilter,Item_PurchaseFilter
+from .filters import Item_dstFilter,Item_PurchaseFilter ,Item_ScrapFilter
 from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
@@ -24,6 +24,7 @@ from stock.utils import render_to_pdf #created in step 4
 
 items_d = ""  # Global Variable for Excel Distrubute Items
 items_p = ""  # Global Variable for Excel Purchase Items
+items_s = ""  # Global Variable for Excel Scarp Items
 
 
 # Create your views here.
@@ -109,27 +110,6 @@ def export_xls_purchase(request):
             ws.write(row_num, col_num, row[col_num], font_style)
     wb.save(response)
     return response
-
-
-# Front Views-- Labs Details
-
-def labs(request):
-    item_name_b = ItemDist.objects.all().filter(item_name=1, room='102 B', acblock__name='AB- 09')
-    item_qty_b = ItemDist.objects.all().filter(item_name=1, room='102 B', acblock__name='AB- 09').aggregate(
-        Sum('item_qty'))
-    item_name_c = ItemDist.objects.all().filter(item_name=1, room='102 C', acblock__name='AB- 09')
-    item_qty_c = ItemDist.objects.all().filter(item_name=1, room='102 C', acblock__name='AB- 09').aggregate(
-        Sum('item_qty'))
-    item_name_d = ItemDist.objects.all().filter(item_name=1, room='102 D', acblock__name='AB- 09')
-    item_qty_d = ItemDist.objects.all().filter(item_name=1, room='102 D', acblock__name='AB- 09').aggregate(
-        Sum('item_qty'))
-    item_name_e = ItemDist.objects.all().filter(item_name=1, room='102 E', acblock__name='AB- 09')
-    item_qty_e = ItemDist.objects.all().filter(item_name=1, room='102 E', acblock__name='AB- 09').aggregate(
-        Sum('item_qty'))
-    # itm = ItemDist.objects.all().order_by('room')
-    choices = {'ItemName_b': item_name_b, 'ItemQty_b': item_qty_b, 'ItemName_c': item_name_c, 'ItemQty_c': item_qty_c,
-               'ItemName_d': item_name_d, 'ItemQty_d': item_qty_d, 'ItemName_e': item_name_e, 'ItemQty_e': item_qty_e}
-    return render(request, 'labs.html', choices)
 
 # Cpanel  Views-- DashBoard C Panel
 
@@ -350,12 +330,16 @@ def currentsttaus(request):
 
         issue_itm = ItemName.objects.values('item_name') \
             .annotate(issue_qty=Sum('itemdist__item_qty'))
-        '''
+        
         scrape_itm = ItemName.objects.values('item_name') \
-            .annotate(issue_qty=Sum('itemdist__item_qty').filter(itemdist__act=1))
-        print(scrape_itm)
-        '''
-        choices = {'ds':purchage_itm ,'ds1': issue_itm}    
+            .annotate(scrap_qty=Sum('itemscrap__item_qty'))
+        
+        Balance_itm = ItemName.objects.values('item_name') \
+            .annotate(Balance=Sum('itempurchase__item_qty') - Sum('itemdist__item_qty')  \
+                )
+        
+        
+        choices = {'ds':purchage_itm ,'ds1': issue_itm , 'ds2': scrape_itm , 'ds3':Balance_itm}    
         return render(request, 'cpanel/current/current_status.html',choices)
 
 # Cpanel  Views-- Add Purchase Items
@@ -464,3 +448,36 @@ class GeneratePdf_issue_items(View):
             response['Content-Disposition'] = content
             return response
         return HttpResponse("Not found")
+
+# Scrap Item View
+@login_required
+def itemscrap(request):
+    if not request.user.has_perm('auth.add_group'):
+        return render(request, 'cpanel/error.html')
+    else:
+        upload = Create_scrap_Form()  # Create_scrap_Form is a form
+        if request.method == 'POST':
+            upload = Create_scrap_Form(request.POST, request.FILES)
+            if upload.is_valid():
+                upload.save()
+                messages.success(request, "Item Added successful.")
+                return redirect('itempurchase')
+            else:
+                messages.error(request, "Item Unsuccessful")
+        
+    return render(request, "cpanel/scrap/itemscrap.html",{'upload_form': upload})
+#   Views-- List of Scrap Items
+@login_required
+def itemscraplist(request):
+    if not request.user.has_perm('auth.view_group'):
+        return render(request, 'cpanel/error.html')
+    else:      
+        item_lst = ItemScrap.objects.all().order_by('item_name')
+        z = request.GET
+        item_filter = Item_ScrapFilter(z, queryset=item_lst)
+        global items_d
+        items_s = z
+        
+        item_qty = item_filter.qs.aggregate(Sum('item_qty'))
+        choices = {'filter': item_filter, 'totality': item_qty}
+    return render(request, 'cpanel/scrap/itemscrap_list.html', choices)
