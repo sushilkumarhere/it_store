@@ -1,0 +1,21 @@
+echo "# talent_online" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/sushilkumarhere/talent_online.git
+git push -u origin main
+
+
+activate virtual environment:
+
+python -m venv c:\path\to\myenv( Name of Venv "venv_its")
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted
+.\venv_its\Scripts\Activate
+
+
+Quick fix is to add reportlab==3.6.6 in requirements.txt until this commit is merged.
+
+
+
+
