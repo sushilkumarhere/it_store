@@ -1,5 +1,7 @@
+from re import A
+
 from urllib import request
-from django.db.models.expressions import F
+from django.db.models.expressions import F 
 import xlwt,os,json
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
@@ -14,12 +16,12 @@ from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
 from userprofile.models import Profile
-
 from django.http import HttpResponse
 from django.views.generic import View
 from django.template.loader import get_template
 
 from stock.utils import render_to_pdf #created in step 4
+from django.db.models.query import QuerySet
 
 
 items_d = ""  # Global Variable for Excel Distrubute Items
@@ -324,23 +326,24 @@ def item_brandwise(request):
 def currentsttaus(request):
     if not request.user.has_perm('auth.add_group'):
         return render(request, 'cpanel/error.html')
-    else:     
-        purchage_itm=ItemName.objects.values('item_name') \
-            .annotate(purchase_qty=Sum('itempurchase__item_qty'))        
+    else: 
+            purchage_itm=ItemName.objects \
+                .annotate(purchase_qty1=Sum('itempurchase__item_qty'))
+            issue_itm = ItemName.objects \
+                .annotate(issue_qty=Sum('itemdist__item_qty'))
+            scrape_itm = ItemName.objects\
+                .annotate(scrap_qty=Sum('itemscrap__item_qty'))            
 
-        issue_itm = ItemName.objects.values('item_name') \
-            .annotate(issue_qty=Sum('itemdist__item_qty'))
+            stock_min = ItemName.objects.annotate(purchase_qty=Sum('itempurchase__item_qty') \
+                 - Sum('itemdist__item_qty'))
+
+            aa=ItemName.objects.annotate(aaa=F('purchase_qty1')-F('issue_qty'))
+
         
-        scrape_itm = ItemName.objects.values('item_name') \
-            .annotate(scrap_qty=Sum('itemscrap__item_qty'))
-        
-        Balance_itm = ItemName.objects.values('item_name') \
-            .annotate(Balance=Sum('itempurchase__item_qty') - Sum('itemdist__item_qty')  \
-                )
-        
-        
-        choices = {'ds':purchage_itm ,'ds1': issue_itm , 'ds2': scrape_itm , 'ds3':Balance_itm}    
-        return render(request, 'cpanel/current/current_status.html',choices)
+    choices = {'ds':purchage_itm ,'ds1': issue_itm , 'ds2': scrape_itm , 'aa':aa  }    
+    return render(request, 'cpanel/current/current_status.html',choices)
+
+
 
 # Cpanel  Views-- Add Purchase Items
 @login_required

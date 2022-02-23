@@ -8,4 +8,7 @@ This application build in Django Framework in Python.
 pip install --only-binary :all: mysqlclient
  py manage.py dumpdata > 21aug.json
  py manage.py loaddata 21aug.json
+
+ # migrations
+ #python manage.py migrate --fake <appname>
  
