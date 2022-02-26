@@ -13,6 +13,7 @@ urlpatterns = [
 
     # Control Panel Site URLs
     #path('cpanel/', views.cpanel, name='cpanel'),
+    
     path('SignOut/', views.signout, name='SignOut'),
     path('cpanel/change-password/', views.change_password, name='change-password'),
     path('cpanel/AdminItems/', views.citem_list, name='item_list'),
@@ -34,5 +35,6 @@ urlpatterns = [
     path('cpanel/issue/print/', views.GeneratePdf_issue_items.as_view(), name='print_issue_item'),
     path('cpanel/scrapadd/', views.itemscrap, name='itemscrap'),
     path('cpanel/scraplist/', views.itemscraplist, name='itemscraplist'),
+    path('cpanel/ScrapItemUpdate/<int:item_id>', views.itemscrap_update, name='itemscrap_update'),    
     
 ]   

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 {% extends "cpanel/AdminBase.html" %}
 {% load widget_tweaks %}
+}
 <body>
         {% block title %}
                 <div class="card-header">
@@ -24,11 +25,11 @@
         <form class="row g-3" method="get" id="ItemSearch" data-cities-url="{% url 'ajax_load_ItemModel' %}" >
             {% csrf_token %}          
             <div class="row">                             
-                    <div class="col-2">
+                    <div class="col-4">
                         {{ filter.form.item_name.label_tag }}
                         {% render_field filter.form.item_name class="form-control" %}
                     </div>
-                    <div class="col-2">
+                    <div class="col-4">
                         {{ filter.form.item_model.label_tag }}
                         {% render_field filter.form.item_model class="form-control" %}
                     </div>
@@ -40,9 +41,7 @@
                 </div>               
         </form>
     </div>
-
-
-        
+    
         <div class="card">
             <div class="table-responsive">
                 <table class="table" id="table"
@@ -54,11 +53,11 @@
                         <th scope="col">Item Name</th>
                         <th scope="col">Model No[Spec]</th>                        
                         <th scope="col">DoP</th>
-                        <th scope="col">Scrap Type</th>
-                        <th scope="col">Qty</th>
-                        <th scope="col">Vendor</th>     
-                        <th scope="col">Action</th> 
-
+                        <th scope="col">Scrap Type</th>                       
+                        <th scope="col" style="width: 300px;" >Vendor</th>
+                        <th scope="col">Contact No</th>
+                        <th scope="col">Qty</th>    
+                        <th scope="col">Action</th>
                      </tr>
                     </thead>
                     <tbody>
@@ -69,30 +68,21 @@
                         <td>{{ itm.item_model }} <p class="text-primary"> [{{ itm.item_configuration }}]</p></td>
                         <td>{{ itm.purchase_date }}</td>
                         <td>{{ itm.scrap_type }}</td>
-                       
-                        <td>{{ itm.item_qty }}</td>
-                        <td>{{ itm.item_vendor }}</td>
-
-                        
+                        <td>{{ itm.scrap_vendor }}</td>
+                        <td>{{ itm.vendor_phone }}</td>                       
+                        <td>{{ itm.item_qty }}</td>                   
                         <td>
-                            <a href="#" class="edit" id = '{{itm.id}}' title="Edit" data-toggle="tooltip"><i class="fas fa-edit fa-2x"></i></a>
-                            <a href="#" class="Delete" id = '{{itm.id}}'title="Delete" data-toggle="tooltip">
-                                <span style="color: red;">
-                                    <i class="fas fa-trash fa-1x "></i></a>  
-                                  </span>
-                            </a>
-                            {% if itm.act == 0 %}
-                            <a href="{% url 'item_approved' itm.id %}" class="Delete" id = '{{itm.id}}'title="Approved" data-toggle="tooltip"><i class="fas fa-check-double"></i></a>
-                            {% endif %}
+                            <a href="{% url 'itemscrap_update' itm.id %}" class="edit" id = '{{itm.id}}' title="Edit" data-toggle="tooltip"><i class="fas fa-edit fa-2x"></i></a>
                         </td>
                     </tr>
                     {% endfor  %}
                     </tbody>
                 </table>
             </div>
-          </div>   
-            
+          </div>
 
+          
+    <!-- Update Model Name depending on the Item Name. -->        
           <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
               <script>
                 $("#id_item_name").change(function () {
@@ -107,13 +97,8 @@
                       $("#id_item_model").html(data);
                     }
                   });
-
                 });
-
               </script>
-
-
       {% endblock mainblock %}
 </body>
-
 </html>

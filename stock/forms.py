@@ -112,3 +112,13 @@ class Create_scrap_Form(forms.ModelForm):
                 pass  # invalid input from the client; ignore and fallback to empty City queryset
         elif self.instance.pk:
             self.fields['item_model'].queryset = self.instance.item_name.item_model_set.order_by('item_model')
+
+class scrap_update_form(forms.ModelForm):
+    class Meta:
+        model = ItemScrap
+        fields = '__all__'
+        widgets = {
+            'item_scarp_date': DateInput(attrs={'type': 'date'}),
+            'purchase_date': DateInput(attrs={'type': 'date'})
+
+                    }

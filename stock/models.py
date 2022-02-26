@@ -5,6 +5,8 @@ from django.db.models.signals import post_save
 from django.core.exceptions import ValidationError
 from django.dispatch import receiver
 import os
+from phonenumber_field.modelfields import PhoneNumberField
+
 
 # Create your models here.
 
@@ -213,9 +215,10 @@ class ItemScrap(models.Model):
     item_model = models.ForeignKey(ItemModel, on_delete=models.CASCADE)
     item_configuration = models.CharField("Items Specifications", max_length=100)
     purchase_date = models.DateField(null=True,blank=True)
-    scrap_type = models.CharField("Scrap Type",choices=scrap_type,max_length=10 ,default="SCRAP")
+    scrap_type = models.CharField("Scrap Type",choices=scrap_type,max_length=10 ,default="SCRAP")    
+    scrap_vendor = models.CharField("Vendor Name",max_length=100)
+    vendor_phone = PhoneNumberField(null = True, blank = True) # Phone Number field from externel Library
     item_qty = models.IntegerField()
-    item_vendor = models.CharField("Vendor Name",max_length=100)
 
 
     class Meta:

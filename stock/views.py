@@ -1,15 +1,11 @@
-from re import A
-
-from urllib import request
-from django.db.models.expressions import F 
-import xlwt,os,json
+import xlwt,json
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, JsonResponse
-from stock.forms import Create_ItmDist_Form, item_list_update , Item_purchase_create_Form,purchase_item_update_form ,Create_scrap_Form
+from stock.forms import Create_ItmDist_Form, item_list_update , Item_purchase_create_Form, \
+purchase_item_update_form ,Create_scrap_Form ,scrap_update_form
 from stock.models import ItemDist, ItemName, ItemModel, ac_block,ItemPurchase , ItemScrap
-from django.db.models import Sum, Q
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.db.models import Sum, Q , F , Sum    
 from django.shortcuts import render, get_object_or_404, redirect
 from .filters import Item_dstFilter,Item_PurchaseFilter ,Item_ScrapFilter
 from django.contrib import messages
@@ -19,9 +15,7 @@ from userprofile.models import Profile
 from django.http import HttpResponse
 from django.views.generic import View
 from django.template.loader import get_template
-
-from stock.utils import render_to_pdf #created in step 4
-from django.db.models.query import QuerySet
+from stock.utils import render_to_pdf       #created in Utils.py
 
 
 items_d = ""  # Global Variable for Excel Distrubute Items
@@ -147,15 +141,7 @@ def citem_list(request):
         z = request.GET
         item_filter = Item_dstFilter(z, queryset=item_lst)
         global items_d
-        items_d = z
-        page = request.GET.get('page', 1)
-        paginator = Paginator(item_filter.qs, 10)
-        try:
-            itm = paginator.page(page)
-        except PageNotAnInteger:
-            itm = paginator.page(1)
-        except EmptyPage:
-            itm = paginator.page(paginator.num_pages)
+        items_d = z        
         item_qty = item_filter.qs.aggregate(Sum('item_qty'))
         choices = {'filter': item_filter, 'totality': item_qty}
     return render(request, 'cpanel/issue/item_list.html', choices)
@@ -296,15 +282,13 @@ def change_password(request):
             user = form.save()
             update_session_auth_hash(request, user)  # Important!
             messages.success(request, 'Your password has been successfully updated!')
-            return render(request, 'cpanel/massage.html')
-            
+            return render(request, 'cpanel/massage.html')            
         else:
             messages.error(request, 'Please correct the error below.')
     else:
         form = PasswordChangeForm(request.user)
     return render(request, 'cpanel/user/ChangePass.html', {'form': form })
     
-
 
 # Cpanel  Views-- List of Items Brand Wise
 @login_required
@@ -326,24 +310,18 @@ def item_brandwise(request):
 def currentsttaus(request):
     if not request.user.has_perm('auth.add_group'):
         return render(request, 'cpanel/error.html')
-    else: 
-            purchage_itm=ItemName.objects \
-                .annotate(purchase_qty1=Sum('itempurchase__item_qty'))
-            issue_itm = ItemName.objects \
-                .annotate(issue_qty=Sum('itemdist__item_qty'))
-            scrape_itm = ItemName.objects\
-                .annotate(scrap_qty=Sum('itemscrap__item_qty'))            
+    else:     
+        purchage_itm=ItemName.objects.values('item_name') \
+            .annotate(purchase_qty=Sum('itempurchase__item_qty'))        
 
-            stock_min = ItemName.objects.annotate(purchase_qty=Sum('itempurchase__item_qty') \
-                 - Sum('itemdist__item_qty'))
-
-            aa=ItemName.objects.annotate(aaa=F('purchase_qty1')-F('issue_qty'))
-
+        issue_itm = ItemName.objects.values('item_name') \
+            .annotate(issue_qty=Sum('itemdist__item_qty'))
         
-    choices = {'ds':purchage_itm ,'ds1': issue_itm , 'ds2': scrape_itm , 'aa':aa  }    
-    return render(request, 'cpanel/current/current_status.html',choices)
-
-
+        scrape_itm = ItemName.objects.values('item_name') \
+            .annotate(scrap_qty=Sum('itemscrap__item_qty'))       
+                
+        choices = {'ds':purchage_itm ,'ds1': issue_itm , 'ds2': scrape_itm}    
+        return render(request, 'cpanel/current/current_status.html',choices)
 
 # Cpanel  Views-- Add Purchase Items
 @login_required
@@ -393,8 +371,6 @@ def purchase_item_delete(request, item_id):
             return redirect("itempurchaselist")
     return render(request, "cpanel/issue/Delete_items.html", context)
 
-    
-
 # Cpanel  Views-- Update Purchase Items
 
 @login_required
@@ -443,7 +419,7 @@ class GeneratePdf_issue_items(View):
         #return HttpResponse(pdf, content_type='application/pdf')
         if pdf:
             response = HttpResponse(pdf, content_type='application/pdf')
-            filename = "PurchaseItemList%s.pdf" %("001")
+            filename = "IssueItemList%s.pdf" %("001")
             content = "inline; filename='%s'" %(filename)
             download = request.GET.get("download")
             if download:
@@ -464,7 +440,7 @@ def itemscrap(request):
             if upload.is_valid():
                 upload.save()
                 messages.success(request, "Item Added successful.")
-                return redirect('itempurchase')
+                return redirect('itemscrap')
             else:
                 messages.error(request, "Item Unsuccessful")
         
@@ -484,3 +460,16 @@ def itemscraplist(request):
         item_qty = item_filter.qs.aggregate(Sum('item_qty'))
         choices = {'filter': item_filter, 'totality': item_qty}
     return render(request, 'cpanel/scrap/itemscrap_list.html', choices)
+
+@login_required
+def itemscrap_update(request, item_id, template_name='cpanel/scrap/itemscrap_update.html'):
+    if not request.user.has_perm('auth.change_group'):
+        return render(request, 'cpanel/error.html')
+    else:
+        post = get_object_or_404(ItemScrap, pk=item_id)  # ItemPurchase is a  Model
+        form = scrap_update_form(request.POST or None,request.FILES or None, instance=post)  # purchase_item_update_form is a  Form
+        if form.is_valid():
+            obj=form.save(commit=False)
+            obj.save()
+            return redirect('itemscraplist')
+    return render(request, template_name, {'form': form})

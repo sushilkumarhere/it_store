@@ -5,7 +5,7 @@
         {% block title %}
                 <div class="card-header">
                     <div class="d-flex align-items-center">
-                        <h5 class="card-title"> <i class="fas fa-edit"></i>Update Item List ---->> Total Items | {{ totality.item_qty__sum }}</h5>
+                        <h5 class="card-title"> <i class="fas fa-edit"></i>Issue Item List ---->> Total Items | {{ totality.item_qty__sum }}</h5>
                         &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;
                         &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;
                         &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;
@@ -74,7 +74,7 @@
                     <tr>
                         <td>{{ itm.item_name }}</td>
                         <td>{{ itm.item_model }} <p class="text-primary"> [{{ itm.item_configuration }}]</p></td>
-                        <td>{{ itm.acblock }} [{{ itm.room }}] : {{ itm.room_type }}</td>
+                        <td>{{ itm.acblock }} [{{ itm.room }}] <p class="text-primary">{{ itm.room_type }}</p></td>
                         <td>{{ itm.inst }}<p class="text-primary">{{ itm.user }}</p></td>
                         <td>{{ itm.item_qty }}</td>
                         <td>{{ itm.purchase_date }}</td>

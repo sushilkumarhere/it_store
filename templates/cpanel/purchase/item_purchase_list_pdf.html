@@ -1,20 +1,43 @@
 <!DOCTYPE html> 
+{% load static %}
     <head>
-        <style>
-            table { font-family: arial, sans-serif;border-collapse: collapse;width: 100%;}                            
-            td, th {border: 1px solid black;text-align: left;padding: 3px;}                            
-            tr:nth-child(even) {background-color: #dddddd; }
-            h2 {text-align: center;}
-        </style>        
+      <style>
+              div {  color: blue; font-weight: bold;}
+              h2 {text-align: center; font-size: 20px; font-weight: bold}
+              h3 {text-align: center; font-size: 12px;} 
+        @page {
+            size: a4 portrait;
+                @frame header_frame {           /* Static Frame */
+                -pdf-frame-content: header_content;
+                left: 10pt; width: 512pt; top: 20pt; height: 70pt;
+                                     }
+                @frame content_frame {          /* Content Frame */
+                left: 40pt; width: 512pt; top: 50pt; height: 760pt;
+                                        }
+                 @frame footer_frame {           /* Another static Frame */
+                -pdf-frame-content: footer_content;
+                left: 510pt; width: 512pt; top: 820pt; height: 20pt;
+                                    }
+                }
+                 /* Table Font and border CSS */
+                table { font-family: arial, sans-serif;border-collapse: collapse;width: 100%;}                            
+                td, th {border: 1px solid black;text-align: left;padding: 3px;}                            
+                tr:nth-child(even) {background-color: #dddddd; }
+                h2 {text-align: center;}
+        </style> 
+        
     </head>
   <body>
-    <h2 style="font-size:20px">List of Items(Purchase)</h2>  
-            <table >          
+                    <h2 id="header_content">List of Items[Purchased]</h2>        
+                    <div id="footer_content">Page <pdf:pagenumber>
+                        of <pdf:pagecount>
+                    </div>  
+            <table repeat="1">          
                 <thead>
                   <tr>
-                      <th scope="col" style="width: 90px;">Purchase Date</th>
+                      <th scope="col" style="width: 86px;">Purchase Date</th>
                       <th scope="col" style="width:95px;">Item Name</th>
-                      <th scope="col" style="width:120px;">Model No</th>                   
+                      <th scope="col" style="width:100px;">Model No</th>                   
                       <th scope="col" style="width:190px;">Vendor Name </th>
                       <th scope="col" style="width:120px;" >Invoice</th>
                       <th scope="col">Price</th>
@@ -30,7 +53,7 @@
                       <td>{{ itm.item_vendor }}</td>
                       <td>{{ itm.item_invoice }}</td>
                       <td>{{ itm.item_price }}</td>
-                      <td>{{ itm.item_qty }}</td>                        
+                      <td><h3>{{ itm.item_qty }}</h3></td>                        
                   </tr>
                 {% endfor  %}
                 </tbody>
