@@ -16,6 +16,9 @@ Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted
 
 Quick fix is to add reportlab==3.6.6 in requirements.txt until this commit is merged.
 
+# Craete a Requirement.txt file
+pip freeze > requirements.txt
 
-
+# install the requirement.txt
+pip install -r /path/to/requirements.txt
 
