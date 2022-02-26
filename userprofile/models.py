@@ -29,10 +29,7 @@ class Profile(models.Model):
     gender = models.PositiveSmallIntegerField(choices=GENDER_CHOICES, null=True, blank=True)
     phone = models.CharField(max_length=32, null=True, blank=True)
     address = models.CharField(max_length=255, null=True, blank=True)
-    #number = models.CharField(max_length=32, null=True, blank=True)
-    inst = models.ForeignKey(InstituteName, on_delete=models.CASCADE, null=True, blank=True, verbose_name="Institute Name")
-    #city = models.CharField(max_length=50, null=True, blank=True)
-    #zip = models.CharField(max_length=30, null=True, blank=True)
+    
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
